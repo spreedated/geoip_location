@@ -1,24 +1,25 @@
 ﻿Imports System.IO
-Public Class main
+Public Class Frm_Main
+    Private GOutput As GeoOutput
 
 #Region "Resize window"
+    Private WithEvents Anitimer As Timers.Timer = New Timers.Timer
     Private windowStatus As Boolean = False
     Private meHeight As Integer = 0
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button1.Click
         meHeight = Me.Size.Height
         Button1.Enabled = False
         Button2.Visible = False
-        Timer1.Start()
+        Anitimer.Start()
     End Sub
-
-    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+    Private Sub Anitimer_Tick(sender As Object, e As EventArgs) Handles Anitimer.Elapsed
         Select Case windowStatus
             Case False
                 meHeight += 15
                 Me.Size = New Point(571, meHeight)
                 If meHeight >= 747 Then
                     Me.Size = New Point(571, 747)
-                    Timer1.Stop()
+                    Anitimer.Stop()
                     windowStatus = True
                     Button1.Enabled = True
                     Button1.Text = "«« &Small window"
@@ -30,7 +31,7 @@ Public Class main
                 Me.Size = New Point(571, meHeight)
                 If meHeight <= 371 Then
                     Me.Size = New Point(571, 371)
-                    Timer1.Stop()
+                    Anitimer.Stop()
                     windowStatus = False
                     Button1.Enabled = True
                     Button1.Text = "&Show region on GMaps »»"
@@ -45,7 +46,7 @@ Public Class main
     Private Sub Button5_Click(sender As Object, e As EventArgs) Handles Button5.Click
         Try
             My.Computer.Clipboard.Clear()
-            My.Computer.Clipboard.SetText(make_geo_output)
+            My.Computer.Clipboard.SetText(GOutput.Output)
             ToolStripStatusLabel1.Text = "[+] Copied to clipboard!"
             My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Beep)
         Catch ex As Exception
@@ -57,7 +58,7 @@ Public Class main
     Private Sub Button6_Click(sender As Object, e As EventArgs) Handles Button6.Click
         If SaveFileDialog1.ShowDialog() = Windows.Forms.DialogResult.OK Then
             Try
-                File.WriteAllText(SaveFileDialog1.FileName, make_geo_output)
+                File.WriteAllText(SaveFileDialog1.FileName, GOutput.Output)
                 ToolStripStatusLabel1.Text = "[+] File saved! @ " & SaveFileDialog1.FileName
                 My.Computer.Audio.PlaySystemSound(Media.SystemSounds.Beep)
             Catch ex As Exception
@@ -75,33 +76,37 @@ Public Class main
         End If
 
         ToolStripStatusLabel1.Text = "[-] Parsing..."
+        GOutput = New GeoOutput
+
         Try
             Button1.Enabled = False
             Button3.Enabled = False
             TextBox1.Enabled = False
 
-            utrace_query(TextBox1.Text)
+            GOutput.UtraceQuery(TextBox1.Text)
 
-            Label10.Text = utrace_ip
-            Label9.Text = utrace_host
-            Label8.Text = utrace_isp
-            Label7.Text = utrace_org
-            Label6.Text = utrace_region
-            Label11.Text = utrace_countrycode
-            Label13.Text = utrace_latitude
-            Label15.Text = utrace_longitude
-            Label17.Text = utrace_queries
+            With GOutput
+                Label10.Text = .IP
+                Label9.Text = .Host
+                Label8.Text = .ISP
+                Label7.Text = .Organization
+                Label6.Text = .Region
+                Label11.Text = .CountryCode
+                Label13.Text = .Latitude
+                Label15.Text = .Longitude
+                Label17.Text = .Queries
+            End With
 
             ToolStripStatusLabel1.Text = "[+] Ready - results for " & TextBox1.Text
             Try
-                WebBrowser1.Navigate("http://maps.googleapis.com/maps/api/staticmap?center=" & utrace_latitude & "," & utrace_longitude & "&zoom=6&size=525x312&maptype=roadmap&markers=color:green%7Clabel:GeoIP%7C" & utrace_latitude & "," & utrace_longitude)
+                WebBrowser1.Navigate("http://maps.googleapis.com/maps/api/staticmap?center=" & GOutput.Latitude & "," & GOutput.Longitude & "&zoom=6&size=525x312&maptype=roadmap&markers=color:green%7Clabel:GeoIP%7C" & GOutput.Latitude & "," & GOutput.Longitude)
             Catch ex As Exception
             End Try
             Button1.Enabled = True
             Button3.Enabled = True
             TextBox1.Enabled = True
             TrackBar1.Enabled = True
-            'Button4.Enabled = True
+            Button4.Enabled = True
             Button5.Enabled = True
             Button6.Enabled = True
         Catch ex As Exception
@@ -121,14 +126,14 @@ Public Class main
             Label17.Text = Nothing
             TrackBar1.Enabled = False
             WebBrowser1.Navigate("")
-            'Button4.Enabled = False
+            Button4.Enabled = False
             Button5.Enabled = False
             Button6.Enabled = False
         End Try
 
     End Sub
-    Private Sub main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        Me.Text = myappfullname
+    Private Async Sub Main_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Me.Text = MyAppFullName()
         Me.Size = New Point(571, 371)
         Button2.Location = New Point(487, 310)
         ToolStripStatusLabel1.Text = "[+] Ready"
@@ -139,10 +144,27 @@ Public Class main
             End If
         Next
 
+        Dim t As Task(Of String) = Task(Of String).Factory.StartNew(Function()
+                                                                        Dim acc As String = Nothing
+                                                                        Try
+                                                                            Using webC As System.Net.WebClient = New Net.WebClient
+                                                                                acc = webC.DownloadString("http://ipv4bot.whatismyipaddress.com")
+                                                                            End Using
+                                                                        Catch ex As Exception
+                                                                            Debug.Print("IP Query failed: " & ex.Message)
+                                                                        End Try
+                                                                        Return acc
+                                                                    End Function)
+        Await t
+
+        If t.Result IsNot Nothing Then
+            TextBox1.Text = t.Result
+        End If
+
+        TextBox1_GotFocus(Nothing, Nothing)
     End Sub
     Private Sub TextBox1_GotFocus(sender As Object, e As EventArgs) Handles TextBox1.GotFocus
-        If TextBox1.Text.Contains("ex.") Then
-            TextBox1.Text = Nothing
+        If Not TextBox1.Text.Contains("ex.") Then
             TextBox1.ForeColor = Color.Black
         End If
     End Sub
@@ -165,7 +187,7 @@ Public Class main
 
     Private Sub WebBrowser1_DocumentCompleted(sender As Object, e As WebBrowserDocumentCompletedEventArgs) Handles WebBrowser1.DocumentCompleted
         Dim u As String = WebBrowser1.Url.ToString
-        Dim i As Integer = 0
+        Dim i As Integer
         If u.Contains("zoom=") Then
             u = u.Substring(u.IndexOf("zoom=") + 5)
             u = u.Substring(0, u.IndexOf("&"))
@@ -191,11 +213,12 @@ Public Class main
     End Sub
 
     Private Sub Button2_Click_1(sender As Object, e As EventArgs) Handles Button2.Click
-        infobox.ShowDialog()
+        Frm_Infobox.ShowDialog()
     End Sub
 
     Private Sub Button4_Click(sender As Object, e As EventArgs) Handles Button4.Click
-        whois_form.ShowDialog()
+        Frm_Whois.GOutput = GOutput
+        Frm_Whois.ShowDialog()
     End Sub
 
     Private Sub TextBox1_KeyPress(sender As Object, e As KeyPressEventArgs) Handles TextBox1.KeyPress

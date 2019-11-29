@@ -11,14 +11,14 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("GeoLocation_utrace")> 
 <Assembly: AssemblyDescription("Markus Wackermann")> 
 <Assembly: AssemblyCompany("Markus Wackermann")> 
-<Assembly: AssemblyProduct("GeoLocation_utrace")> 
-<Assembly: AssemblyCopyright("Markus Wackermann ©  2015")> 
+<Assembly: AssemblyProduct("GeoLocation_utrace")>
+<Assembly: AssemblyCopyright("2015-2019 ©  Markus Wackermann")>
 <Assembly: AssemblyTrademark("Markus Wackermann")> 
 
 <Assembly: ComVisible(False)>
 
 'Die folgende GUID bestimmt die ID der Typbibliothek, wenn dieses Projekt für COM verfügbar gemacht wird
-<Assembly: Guid("5da1f5ee-f618-4ea9-ad5e-8f71992ab1e5")> 
+<Assembly: Guid("5da1f5ee-f618-4ea9-ad5e-8f71992ab1e5")>
 
 ' Versionsinformationen für eine Assembly bestehen aus den folgenden vier Werten:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' übernehmen, indem Sie "*" eingeben:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("1.1.0.0")>
+<Assembly: AssemblyFileVersion("1.1.0.0")>

@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <StartupObject>GeoLocation_utrace.My.MyApplication</StartupObject>
     <RootNamespace>GeoLocation_utrace</RootNamespace>
-    <AssemblyName>GeoLocation_utrace</AssemblyName>
+    <AssemblyName>GeoLocation Utrace</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>WindowsForms</MyType>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -20,7 +21,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>GeoLocation_utrace.xml</DocumentationFile>
+    <DocumentationFile>GeoLocation Utrace.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -30,7 +31,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>GeoLocation_utrace.xml</DocumentationFile>
+    <DocumentationFile>GeoLocation Utrace.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -47,6 +48,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>geoip_ico.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -73,21 +77,21 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="infobox.Designer.vb">
-      <DependentUpon>infobox.vb</DependentUpon>
+    <Compile Include="Classes\GeoOutput.vb" />
+    <Compile Include="Forms\Frm_Infobox.Designer.vb">
+      <DependentUpon>Frm_Infobox.vb</DependentUpon>
     </Compile>
-    <Compile Include="infobox.vb">
+    <Compile Include="Forms\Frm_Infobox.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="main.vb">
+    <Compile Include="Forms\Frm_Main.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="main.Designer.vb">
-      <DependentUpon>main.vb</DependentUpon>
+    <Compile Include="Forms\Frm_Main.Designer.vb">
+      <DependentUpon>Frm_Main.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Module1.vb" />
-    <Compile Include="Module2.vb" />
+    <Compile Include="Modules\AppProperties.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -103,19 +107,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="whois_form.Designer.vb">
-      <DependentUpon>whois_form.vb</DependentUpon>
+    <Compile Include="Forms\Frm_Whois.Designer.vb">
+      <DependentUpon>Frm_Whois.vb</DependentUpon>
     </Compile>
-    <Compile Include="whois_form.vb">
+    <Compile Include="Forms\Frm_Whois.vb">
       <SubType>Form</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="infobox.resx">
-      <DependentUpon>infobox.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\Frm_Infobox.resx">
+      <DependentUpon>Frm_Infobox.vb</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="main.resx">
-      <DependentUpon>main.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\Frm_Main.resx">
+      <DependentUpon>Frm_Main.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
@@ -123,11 +127,12 @@
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="whois_form.resx">
-      <DependentUpon>whois_form.vb</DependentUpon>
+    <EmbeddedResource Include="Forms\Frm_Whois.resx">
+      <DependentUpon>Frm_Whois.vb</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.manifest" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -141,10 +146,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="geoip_ico.ico" />
-    <None Include="Resources\1271570_big.jpg" />
-    <None Include="Resources\paypal_donate.jpg" />
+    <None Include="Resources\paypal-donate-button.png" />
     <None Include="Resources\utrace_logo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
