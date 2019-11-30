@@ -1,8 +1,0 @@
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\obj\Release\GeoLocation_utrace.Resources.resources
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\obj\Release\GeoLocation_utrace.vbproj.GenerateResource.Cache
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\bin\Release\GeoLocation Utrace.exe.config
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\bin\Release\GeoLocation Utrace.exe
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\obj\Release\GeoLocation_utrace.Frm_Infobox.resources
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\obj\Release\GeoLocation_utrace.Frm_Main.resources
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\obj\Release\GeoLocation_utrace.Frm_Whois.resources
-D:\Daten\vbnet_projekte\GeoLocation_utrace\GeoLocation_utrace\obj\Release\GeoLocation Utrace.exe
