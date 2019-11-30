@@ -3,16 +3,20 @@ Public Class Frm_Main
     Private GOutput As GeoOutput
 
 #Region "Resize window"
-    Private WithEvents Anitimer As Timers.Timer = New Timers.Timer
+    Private WithEvents Anitimer As System.Windows.Forms.Timer = New System.Windows.Forms.Timer
     Private windowStatus As Boolean = False
     Private meHeight As Integer = 0
     Private Sub Button2_Click(sender As Object, e As EventArgs) Handles Button1.Click
         meHeight = Me.Size.Height
         Button1.Enabled = False
         Button2.Visible = False
-        Anitimer.Start()
+        With Anitimer
+            .Enabled = True
+            .Interval = 1
+            .Start()
+        End With
     End Sub
-    Private Sub Anitimer_Tick(sender As Object, e As EventArgs) Handles Anitimer.Elapsed
+    Private Sub Anitimer_Tick(sender As Object, e As EventArgs) Handles Anitimer.Tick
         Select Case windowStatus
             Case False
                 meHeight += 15
@@ -76,16 +80,21 @@ Public Class Frm_Main
         End If
 
         ToolStripStatusLabel1.Text = "[-] Parsing..."
-        GOutput = New GeoOutput
+
+        Dim service As UTrace = New UTrace With {
+            .Destination = TextBox1.Text
+        }
+
+        GOutput = service
 
         Try
             Button1.Enabled = False
             Button3.Enabled = False
             TextBox1.Enabled = False
 
-            GOutput.UtraceQuery(TextBox1.Text)
+            service.Query()
 
-            With GOutput
+            With service
                 Label10.Text = .IP
                 Label9.Text = .Host
                 Label8.Text = .ISP
@@ -99,14 +108,14 @@ Public Class Frm_Main
 
             ToolStripStatusLabel1.Text = "[+] Ready - results for " & TextBox1.Text
             Try
-                WebBrowser1.Navigate("http://maps.googleapis.com/maps/api/staticmap?center=" & GOutput.Latitude & "," & GOutput.Longitude & "&zoom=6&size=525x312&maptype=roadmap&markers=color:green%7Clabel:GeoIP%7C" & GOutput.Latitude & "," & GOutput.Longitude)
+                WebBrowser1.Navigate("http://maps.googleapis.com/maps/api/staticmap?center=" & service.Latitude & "," & service.Longitude & "&zoom=6&size=525x312&maptype=roadmap&markers=color:green%7Clabel:GeoIP%7C" & service.Latitude & "," & service.Longitude)
             Catch ex As Exception
             End Try
             Button1.Enabled = True
             Button3.Enabled = True
             TextBox1.Enabled = True
             TrackBar1.Enabled = True
-            Button4.Enabled = True
+            'Button4.Enabled = True
             Button5.Enabled = True
             Button6.Enabled = True
         Catch ex As Exception
@@ -176,9 +185,9 @@ Public Class Frm_Main
     End Sub
     Private Sub TextBox1_MouseEnter(sender As Object, e As EventArgs) Handles TextBox1.MouseEnter
         ToolTip1.Active = True
-        ToolTip1.SetToolTip(TextBox1, "Accepted inputs:" & vbCrLf & vbCrLf & _
-                            "IPv4: 173.194.112.119" & vbCrLf & _
-                            "Domain: google.de" & vbCrLf & _
+        ToolTip1.SetToolTip(TextBox1, "Accepted inputs:" & vbCrLf & vbCrLf &
+                            "IPv4: 173.194.112.119" & vbCrLf &
+                            "Domain: google.de" & vbCrLf &
                             "")
     End Sub
     Private Sub TextBox1_MouseLeave(sender As Object, e As EventArgs) Handles TextBox1.MouseLeave
